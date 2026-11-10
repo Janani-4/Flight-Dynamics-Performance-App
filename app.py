@@ -1,5 +1,5 @@
 """
-app.py - Interactive Flight Performance, Optimization & Flight Envelope Tool
+app.py - Flight Performance, Optimization & Flight Envelope Tool
 """
 
 import streamlit as st
@@ -169,13 +169,13 @@ if st.session_state.selected_case == "case1":
     st.subheader("Performance Curves: Required vs. Available")
 
     V_vals = np.linspace(V_stall * 1.01, V_md * 2.4, 200)
-    TR_vals = [fm.thrust_required(v, W, S, rho, CD0, k) for v in V_vals]
-    PR_vals = [fm.power_required(v, W, S, rho, CD0, k) / 1000.0 for v in V_vals]
+    TR_vals = [float(fm.thrust_required(v, W, S, rho, CD0, k)) for v in V_vals]
+    PR_vals = [float(fm.power_required(v, W, S, rho, CD0, k)) / 1000.0 for v in V_vals]
 
     fig_perf = go.Figure()
 
     if prop_type == "Jet":
-        T_avail_h = T_SL * density_ratio
+        T_avail_h = float(T_SL * density_ratio)
         TA_vals = [T_avail_h] * len(V_vals)
 
         fig_perf.add_trace(go.Scatter(x=V_vals, y=TR_vals, mode='lines', name='Thrust Required (T_R)', line=dict(color='#1f77b4', width=3)))
@@ -207,7 +207,7 @@ if st.session_state.selected_case == "case1":
         )
 
     else:
-        P_avail_h = (P_SL * density_ratio) / 1000.0  # kW
+        P_avail_h = float((P_SL * density_ratio) / 1000.0)  # kW
         PA_vals = [P_avail_h] * len(V_vals)
 
         fig_perf.add_trace(go.Scatter(x=V_vals, y=PR_vals, mode='lines', name='Power Required (P_R)', line=dict(color='#ff7f0e', width=3)))
